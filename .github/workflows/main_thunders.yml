@@ -24,18 +24,61 @@ jobs:
       - name: Build with dotnet
         run: dotnet build --configuration Release
 
+      - name: Build test project Database
+        run: dotnet build TarefasApp.Infra.Data\TarefasApp.Infra.Data.Test.csproj --configuration Release        
+
+      - name: Build test project Integration
+        run: dotnet build TarefasApp.API\TarefasApp.IntegrationTests.csproj --configuration Release        
+
       - name: dotnet publish
-        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
+        run: dotnet publish -c Release -o ./myapp  # Publicar a aplicação no diretório 'myapp'
+
+      - name: Compress published app into a ZIP
+        run: Compress-Archive -Path ./myapp/* -DestinationPath ./myapp.zip  # Compactar a aplicação em um arquivo ZIP
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           name: .net-app
-          path: ${{env.DOTNET_ROOT}}/myapp
+          path: ./myapp.zip  # Fazer upload do arquivo ZIP
+          
+          
+  testInfra: 
+    runs-on: windows-latest
+    needs: build
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.x'
+
+      - name: Run tests with dotnet
+        run: dotnet test TarefasApp.API\TarefasApp.IntegrationTests.csproj --configuration Release          
+
+
+  testIntegration: 
+    runs-on: windows-latest
+    needs: build
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.x'
+
+      - name: Run tests with dotnet
+        run: dotnet test TarefasApp.Infra.Data\TarefasApp.Infra.Data.Test.csproj --configuration Release          
+
+
 
   deploy:
     runs-on: windows-latest
-    needs: build
+    needs: [build, testInfra, testIntegration]
     environment:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
@@ -60,6 +103,6 @@ jobs:
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'Thunders'
-          slot-name: 'Production'
-          package: .
+          slot-name: 'production'
+          package: './myapp.zip'  # Usar o arquivo ZIP gerado
           
