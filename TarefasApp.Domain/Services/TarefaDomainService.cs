@@ -6,6 +6,7 @@ using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 using TarefasApp.Domain.Entities;
+using TarefasApp.Domain.Exceptions;
 using TarefasApp.Domain.Extensions;
 using TarefasApp.Domain.Interfaces.Repositories;
 using TarefasApp.Domain.Interfaces.Services;

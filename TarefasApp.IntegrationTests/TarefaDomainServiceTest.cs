@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using TarefasApp.Domain.Entities;
-using TarefasApp.Domain.Extensions;
+using TarefasApp.Domain.Exceptions;
 using TarefasApp.Domain.Interfaces.Repositories;
 using TarefasApp.Domain.Services;
 using TarefasApp.Infra.Data.Contexts;
@@ -164,7 +164,7 @@ namespace TarefasApp.IntegrationTests
         }
 
         [Fact(DisplayName = "Consultar Tarefa por ID deve retornar tarefa existente")]
-        public async Task GetByIdAsync_ShouldReturnTarefa_WhenClienteExists()
+        public async Task GetByIdAsync_ShouldReturnTarefa_WhenTarefaExists()
         {
             var tarefa = new Faker<Tarefa>("pt_BR")
                     .RuleFor(c => c.Id, f => Guid.NewGuid())
@@ -199,7 +199,7 @@ namespace TarefasApp.IntegrationTests
         }
 
         [Fact(DisplayName = "Consultar todas as tarefa")]
-        public async Task GetManyAsync_ShouldReturnClientes_WhenTarefaExist()
+        public async Task GetManyAsync_ShouldReturnTarefas_WhenTarefaExist()
         {
 
             var result = await _tarefaDomainService.GetAll();

@@ -3,14 +3,10 @@ using System.Reflection;
 
 namespace TarefasApp.API.Extensions
 {
-    /// <summary>
-    /// Classe de extensão para configuração do Swagger (OPEN API)
-    /// </summary>
+  
     public static class SwaggerDocExtension
     {
-        /// <summary>
-        /// Método de extensão para configurar as preferências do Swagger
-        /// </summary>
+
         public static IServiceCollection AddSwaggerDoc(this IServiceCollection services)
         {
             services.AddEndpointsApiExplorer();
@@ -19,14 +15,14 @@ namespace TarefasApp.API.Extensions
                 {
                     options.SwaggerDoc("v1", new OpenApiInfo
                     {
-                        Title = "TarefasApp API - Treinamento C# Avançado Formação Arquiteto",
+                        Title = "Thunders API - Desafio Técnico",
                         Description = "API para controle de tarefas de usuários.",
                         Version = "1.0",
                         Contact = new OpenApiContact
                         {
-                            Name = "COTI Informática",
-                            Email = "contato@cotiinformatica.com.br",
-                            Url = new Uri("http://wwww.cotiinformatica.com.br")
+                            Name = "Rubens Bernardes",
+                            Email = "rubensmanhaesb@hotmail.com",
+                            Url = new Uri("https://www.thunders.com.br/")
                         }
                     });
 
@@ -39,9 +35,6 @@ namespace TarefasApp.API.Extensions
             return services;
         }
 
-        /// <summary>
-        /// Método para configurar a execução do Swagger
-        /// </summary>
         public static IApplicationBuilder UseSwaggerDoc(this IApplicationBuilder app)
         {
             app.UseSwagger();

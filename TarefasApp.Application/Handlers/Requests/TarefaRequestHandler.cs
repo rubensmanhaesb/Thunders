@@ -87,7 +87,7 @@ namespace TarefasApp.Application.Handlers.Requests
         {
 
             var tarefa = await _tarefaDomainService.GetById(request.Id.Value);
-            await _tarefaDomainService.Delete(tarefa);
+            await _tarefaDomainService.Delete(new Tarefa() { Id = request.Id.Value });
 
 
             var tarefaDto = _mapper.Map<TarefaDto>(tarefa);

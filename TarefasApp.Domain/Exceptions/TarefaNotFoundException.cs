@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TarefasApp.Domain.Extensions
+namespace TarefasApp.Domain.Exceptions
 {
     public class TarefaNotFoundException : Exception
     {

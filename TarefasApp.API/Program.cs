@@ -4,6 +4,7 @@ using TarefasApp.Infra.Data.Extensions;
 using TarefasApp.Infra.Storage.Extensions;
 using TarefasApp.Infra.Messages.Extensions;
 using TarefasApp.Domain.Extensions;
+using TarefasApp.API.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +18,9 @@ builder.Services.AddMongoDb(builder.Configuration);
 builder.Services.AddRabbitMQ(builder.Configuration);
 
 var app = builder.Build();
+
+app.UseMiddleware<ValidationExceptionMiddleware>();
+app.UseMiddleware<NotFoundExceptionMiddleware>();
 
 app.UseSwaggerDoc();
 app.UseAuthorization();
