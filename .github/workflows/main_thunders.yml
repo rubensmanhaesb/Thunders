@@ -25,10 +25,10 @@ jobs:
         run: dotnet build --configuration Release
 
       - name: Build test project Database
-        run: dotnet build TarefasApp.Infra.Data\TarefasApp.Infra.Data.Test.csproj --configuration Release        
+        run: dotnet build TarefasApp.Infra.Data.Test\TarefasApp.Infra.Data.Test.csproj --configuration Release        
 
       - name: Build test project Integration
-        run: dotnet build TarefasApp.API\TarefasApp.IntegrationTests.csproj --configuration Release        
+        run: dotnet build TarefasApp.IntegrationTests\TarefasApp.IntegrationTests.csproj --configuration Release        
 
       - name: dotnet publish
         run: dotnet publish -c Release -o ./myapp  # Publicar a aplicação no diretório 'myapp'
@@ -56,7 +56,7 @@ jobs:
           dotnet-version: '8.x'
 
       - name: Run tests with dotnet
-        run: dotnet test TarefasApp.API\TarefasApp.IntegrationTests.csproj --configuration Release          
+        run: dotnet testTarefasApp.IntegrationTests\TarefasApp.IntegrationTests.csproj --configuration Release          
 
 
   testIntegration: 
@@ -72,7 +72,7 @@ jobs:
           dotnet-version: '8.x'
 
       - name: Run tests with dotnet
-        run: dotnet test TarefasApp.Infra.Data\TarefasApp.Infra.Data.Test.csproj --configuration Release          
+        run: dotnet test TarefasApp.Infra.Data.Test\TarefasApp.Infra.Data.Test.csproj --configuration Release          
 
 
 
