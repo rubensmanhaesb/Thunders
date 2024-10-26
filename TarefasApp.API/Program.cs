@@ -19,7 +19,11 @@ builder.Services.AddMongoDb(builder.Configuration);
 builder.Services.AddRabbitMQ(builder.Configuration);
 builder.Services.AddCorsConfig(builder.Configuration);
 
+
+
 var app = builder.Build();
+
+app.UseCorsConfig();
 
 app.UseMiddleware<ValidationExceptionMiddleware>();
 app.UseMiddleware<NotFoundExceptionMiddleware>();
