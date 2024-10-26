@@ -5,6 +5,7 @@ using TarefasApp.Infra.Storage.Extensions;
 using TarefasApp.Infra.Messages.Extensions;
 using TarefasApp.Domain.Extensions;
 using TarefasApp.API.Middlewares;
+using ClientesApp.API.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +17,7 @@ builder.Services.AddDomainServices();
 builder.Services.AddDataContext(builder.Configuration);
 builder.Services.AddMongoDb(builder.Configuration);
 builder.Services.AddRabbitMQ(builder.Configuration);
+builder.Services.AddCorsConfig(builder.Configuration);
 
 var app = builder.Build();
 
