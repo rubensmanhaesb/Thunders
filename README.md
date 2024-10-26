@@ -1,5 +1,7 @@
 # TarefasApp
 
+Caso queira pode trocar o email no appsettings.
+
 ## Requisitos
 
 - .NET 8 SDK
