@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: ThundresSqlServer
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Rubens2024!
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlserver_data:/var/opt/mssql
+    networks:
+      - mynetwork
+
+  mongodb:
+    image: mongo:latest
+    container_name: ThundresMongoDB
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - mynetwork
+
+  rabbitmq:
+    image: rabbitmq:management
+    container_name: ThundresRabbitMQ
+    ports:
+      - "5672:5672"   
+      - "15672:15672" 
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    networks:
+      - mynetwork
+
+volumes:
+  sqlserver_data:
+  mongodb_data:
+
+networks:
+  mynetwork:
+    driver: bridge
+
+
