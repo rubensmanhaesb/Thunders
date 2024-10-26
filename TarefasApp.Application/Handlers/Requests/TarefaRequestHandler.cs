@@ -57,7 +57,6 @@ namespace TarefasApp.Application.Handlers.Requests
 
             _messageProducer.SendMessage(new EmailMessageModel
             {
-                To = "rubensmanhaesb@hotmail.com",
                 Subject = $"Nova tarefa criada com sucesso em {DateTime.Now.ToString("dd/MM/yyyy HH:mm")}",
                 Body = Newtonsoft.Json.JsonConvert.SerializeObject(tarefaDto, Formatting.Indented)
             }); ;

@@ -32,7 +32,7 @@ namespace TarefasApp.Domain.Validations
 
             RuleFor(c => c.Nome)
                 .NotEmpty().WithMessage("O nome é obrigatório.")
-                .Length(8, 150).WithMessage("O nome deve ter de 2 a 150 caracteres.");
+                .Length(2, 150).WithMessage("O nome deve ter de 2 a 150 caracteres.");
 
             RuleFor(c => c.Descricao)
                 .NotEmpty().WithMessage("A descrição é obrigatória.");

@@ -21,7 +21,7 @@ namespace TarefasApp.Infra.Messages.Services
 
         public void SendMail(EmailMessageModel model) 
         {
-            var mailMessage = new MailMessage(_emailSettings.Email, model.To);
+            var mailMessage = new MailMessage(_emailSettings.Email, _emailSettings.To);
             mailMessage.Subject = model.Subject;
             mailMessage.Body = model.Body;
 

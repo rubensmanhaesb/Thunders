@@ -12,7 +12,7 @@ namespace TarefasApp.Application.Commands
 
     public class TarefaCreateCommand : IRequest<TarefaDto>
     {
-        [MinLength(8, ErrorMessage = "Informe no mínimo {1} caracteres.")]
+        [MinLength(2, ErrorMessage = "Informe no mínimo {1} caracteres.")]
         [MaxLength(100, ErrorMessage = "Informe no máximo {1} caracteres.")]
         [Required(ErrorMessage = "Informe o nome da tarefa.")]
         public string? Nome { get; set; }
@@ -27,7 +27,7 @@ namespace TarefasApp.Application.Commands
         [Required(ErrorMessage = "Informe a hora da tarefa.")]
         public string? Hora { get; set; }
 
-        [MinLength(8, ErrorMessage = "Informe no mínimo {1} caracteres.")]
+        [MinLength(2, ErrorMessage = "Informe no mínimo {1} caracteres.")]
         [MaxLength(250, ErrorMessage = "Informe no máximo {1} caracteres.")]
         [Required(ErrorMessage = "Informe a descrição da tarefa.")]
         public string? Descricao { get; set; }
