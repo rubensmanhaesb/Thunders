@@ -19,7 +19,7 @@ namespace TarefasApp.Infra.Data.Extensions
             services.AddDbContext<DataContext>
                 (options => options.UseSqlServer(configuration.GetConnectionString("BDTarefasApp")));
 
-            services.AddTransient<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             return services;
         }
