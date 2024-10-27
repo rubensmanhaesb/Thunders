@@ -25,6 +25,7 @@ var app = builder.Build();
 
 app.UseCorsConfig();
 
+
 app.UseMiddleware<ValidationExceptionMiddleware>();
 app.UseMiddleware<NotFoundExceptionMiddleware>();
 
