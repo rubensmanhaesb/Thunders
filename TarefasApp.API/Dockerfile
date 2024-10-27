@@ -58,6 +58,6 @@ WORKDIR /app
 COPY --from=publish /app/publish .
 
 # Define o comando de entrada (ENTRYPOINT) que executa a aplicação. Aqui o comando executa a API com o argumento '--environment' configurado para 'Development'.
-ENTRYPOINT ["dotnet", "TarefasApp.API.dll", "--environment", "Development"]
+ENTRYPOINT ["dotnet", "TarefasApp.API.dll", "--environment", "Production"]
 
 
