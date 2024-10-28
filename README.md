@@ -35,18 +35,19 @@ O Arquivo NugetPackages.docx - contém as extensões utilizadas nos projetos em 
 
 ## Principais Ferramentas e Bibliotecas
 
-1.	.NET 8:
-2.	C# 12.0:
-3.	ASP.NET Core:
-4.	Middleware:
-5.	Exceções Personalizadas:
-6.	Serialização JSON:
-7.	HTTP:
-8.	RabbitMQ:
-9.	MongoDB:
-10.	Docker:
-11.	Teste unitário
-12.	Teste de integração
+1.	.Angular:
+2.	.NET 8:
+3.	C# 12.0:
+4.	ASP.NET Core:
+5.	Middleware:
+6.	Exceções Personalizadas:
+7.	Serialização JSON:
+8.	HTTP:
+9.	RabbitMQ:
+10.	MongoDB:
+11.	Docker:
+12.	Teste unitário
+13.	Teste de integração
 
 ## Estrutura do Projeto
 
