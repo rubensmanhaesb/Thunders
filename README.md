@@ -71,7 +71,7 @@ Implementação dem CQRS utilizando Angular, .NET, SQL Server, MongoDB e RabbitM
 - Moq: Para criação de mocks em testes.
 - Microsoft.AspNetCore.Mvc.Testing: Para testes de integração em aplicações ASP.NET Core.
 
-## Detalahmento da Estrutura do Projeto
+## Detalhamento da Estrutura do Projeto
 
 1. TarefasApp.API - Este projeto é a API principal do sistema, responsável por expor endpoints HTTP para interagir com o sistema. Ele utiliza o .NET 8 e é configurado para diferentes ambientes (Desenvolvimento e Produção) através de arquivos appsettings.
 	-	Principais Responsabilidades:
