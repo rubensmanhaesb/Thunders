@@ -1,36 +1,36 @@
-# Use uma imagem do Node 18 como base
-FROM node:18-alpine
+# Etapa 1: Construir o projeto Angular com Node
+FROM node:18-alpine AS build
 
-# Cria um diretório de trabalho no contêiner
+# Define o diretório de trabalho
 WORKDIR /app
 
-# Copia o arquivo package.json e package-lock.json para o contêiner
+# Copia package.json e package-lock.json para instalar as dependências
 COPY tarefasweb/package*.json ./
 
-# Instala as dependências (inclui Bootstrap)
+# Instala as dependências (incluindo o Bootstrap)
 RUN npm install --legacy-peer-deps
 
-# Copia todos os arquivos do projeto Angular para o contêiner
+# Copia o código fonte do projeto Angular
 COPY tarefasweb/ .
 
 # Constrói o projeto Angular para produção
-RUN npm run build --prod
+RUN npm run build -- --output-path=dist/tarefasweb && ls -la /app/dist/tarefasweb
 
-RUN npm run build --prod && ls -la /app/dist/tarefasweb
 
-# Instala o servidor Nginx para servir o projeto Angular
-RUN apk add --no-cache nginx
+# Etapa 2: Servir o projeto Angular com Nginx
+FROM nginx:alpine
 
-# Garante que o diretório do Nginx existe antes de copiar os arquivos
+# Garante que o diretório do Nginx exista
 RUN mkdir -p /usr/share/nginx/html
+
+# Copia os arquivos construídos do Angular para o diretório do Nginx
+COPY --from=build /app/dist/tarefasweb /usr/share/nginx/html
 
 # Copia o arquivo de configuração do Nginx
 COPY tarefasweb/nginx.conf /etc/nginx/nginx.conf
 
-# Remove o conteúdo padrão do Nginx e copia os arquivos do build do Angular
-RUN rm -rf /usr/share/nginx/html/* && \
-    cp -r /app/dist/tarefasweb/* /usr/share/nginx/html
+# Expõe a porta do Nginx
+EXPOSE 4200
 
-
-# Comando para iniciar o Nginx
+# Inicia o Nginx
 CMD ["nginx", "-g", "daemon off;"]

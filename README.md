@@ -1,9 +1,12 @@
 # TarefasApp
 
-Caso queira pode trocar o email no appsettings.
+Configurações estão no appsettings.
+Banco de Dados - rodar a migration 
+O Arquivo NugetPackages- contem as extensões utilizadas nos projetos em Angular e em .NET (Nuget)
 
 ## Requisitos
 
+-  Angular
 - .NET 8 SDK
 - Visual Studio 2022 ou superior
 - Docker (Opcional)
@@ -15,7 +18,7 @@ Caso queira pode trocar o email no appsettings.
 ## Funcionalidades
 
 - Gerenciamento de tarefas
-- CRUD de tarefas (Criar, Ler, Atualizar, Deletar)
+- CRUD de tarefas 
 - API RESTful para interação com as tarefas
 - Implementação de princípios DDD e TDD para desenvolvimento orientado a testes
 
@@ -27,6 +30,8 @@ Caso queira pode trocar o email no appsettings.
 - XUnit (Framework de Testes)
 - Domain-Driven Design (DDD)
 - Test-Driven Development (TDD)
+- MicroServiços
+- RabbitMQ (Mensageria
 
 ## Principais Ferramentas e Bibliotecas
 
@@ -45,8 +50,8 @@ Caso queira pode trocar o email no appsettings.
 
 ## Estrutura do Projeto
 
-
-- TarefasApp.API
+- TarefasWeb (Angular)
+- TarefasApp.API (.NET)
 - Microsoft.AspNetCore.App: Inclui todos os pacotes necessários para construir uma aplicação ASP.NET Core.
 - System.Text.Json: Para serialização e desserialização de JSON.
 - Microsoft.Extensions.Logging: Para logging dentro da aplicação.

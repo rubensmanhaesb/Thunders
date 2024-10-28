@@ -54,7 +54,8 @@ services:
       - "4200:4200"
     networks:
       - mynetwork
-
+    volumes:
+      - /f/Projetos_CSharp/Thunders/tarefasweb/nginx.conf:/etc/nginx/nginx.conf
 
 volumes:
   sqlserver_data:
