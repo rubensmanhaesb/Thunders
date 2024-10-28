@@ -2,7 +2,7 @@
 
 Configurações estão no appsettings.
 Banco de Dados - rodar a migration 
-O Arquivo NugetPackages- contem as extensões utilizadas nos projetos em Angular e em .NET (Nuget)
+O Arquivo NugetPackages.docx - contém as extensões utilizadas nos projetos em Angular e em .NET (Nuget)
 
 ## Requisitos
 
