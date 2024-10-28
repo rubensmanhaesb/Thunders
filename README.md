@@ -73,37 +73,37 @@ Implementação dem CQRS utilizando Angular, .NET, SQL Server, MongoDB e RabbitM
 ## Detalahmento da Estrutura do Projeto
 
 1. TarefasApp.API
-Este projeto é a API principal do sistema, responsável por expor endpoints HTTP para interagir com o sistema. Ele utiliza o .NET 8 e é configurado para diferentes ambientes (Desenvolvimento e Produção) através de arquivos appsettings.
+-	Este projeto é a API principal do sistema, responsável por expor endpoints HTTP para interagir com o sistema. Ele utiliza o .NET 8 e é configurado para diferentes ambientes (Desenvolvimento e Produção) através de arquivos appsettings.
 -	Principais Responsabilidades:
 -	Expor endpoints RESTful para operações de leitura e escrita.
 -	Configurar dependências como SQL Server, MongoDB, RabbitMQ e serviços de email.
 -	Implementar middleware para CORS, autenticação, autorização e logging.
 2. TarefasApp.Application
-Este projeto contém a lógica de aplicação, incluindo os handlers para comandos e queries. Ele segue o padrão CQRS para separar as responsabilidades de leitura e escrita.
+-	Este projeto contém a lógica de aplicação, incluindo os handlers para comandos e queries. Ele segue o padrão CQRS para separar as responsabilidades de leitura e escrita.
 -	Principais Responsabilidades:
 -	Definir comandos (commands) e consultas (queries).
 -	Implementar handlers para processar comandos e consultas.
 -	Orquestrar a lógica de negócios e interagir com os repositórios.
 3. TarefasApp.Domain
-Este projeto contém as entidades de domínio e as regras de negócio. Ele é independente de qualquer tecnologia de persistência ou infraestrutura.
+-	Este projeto contém as entidades de domínio e as regras de negócio. Ele é independente de qualquer tecnologia de persistência ou infraestrutura.
 -	Principais Responsabilidades:
 -	Definir entidades de domínio e agregados.
 -	Implementar regras de negócio e validações.
 -	Definir eventos de domínio.
 4. TarefasApp.Infrastructure
-Este projeto contém a implementação de infraestrutura, como repositórios, contextos de banco de dados e integrações com serviços externos.
+-	Este projeto contém a implementação de infraestrutura, como repositórios, contextos de banco de dados e integrações com serviços externos.
 -	Principais Responsabilidades:
 -	Implementar repositórios para acesso a dados (SQL Server, MongoDB).
 -	Configurar contextos de banco de dados e mapeamentos ORM.
 -	Integrar com serviços externos como RabbitMQ e provedores de email.
 5. TarefasApp.Tests
-Este projeto contém testes automatizados para garantir a qualidade e a funcionalidade do sistema. Ele pode incluir testes unitários, de integração e de aceitação.
+-	Este projeto contém testes automatizados para garantir a qualidade e a funcionalidade do sistema. Ele pode incluir testes unitários, de integração e de aceitação.
 -	Principais Responsabilidades:
 -	Implementar testes unitários para a lógica de aplicação e domínio.
 -	Implementar testes de integração para verificar a interação entre componentes.
 -	Implementar testes de aceitação para validar cenários de uso completos.
 6. TarefasWeb
-Este projeto é a aplicação front-end, provavelmente uma aplicação Angular, que interage com a API para fornecer uma interface de usuário.
+-	Este projeto é a aplicação front-end, provavelmente uma aplicação Angular, que interage com a API para fornecer uma interface de usuário.
 -	Principais Responsabilidades:
 -	Implementar a interface de usuário para interagir com a API.
 -	Gerenciar estado e navegação da aplicação.
