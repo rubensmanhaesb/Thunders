@@ -1,0 +1,29 @@
+<div *ngIf="isAuthenticated">
+  <!-- componente do menu -->
+  <app-menu />
+
+  <div class="container mt-3">
+    <div class="row">
+      <div class="col-md-10">
+        <h2>Sistema de gerenciamento de tarefas</h2>
+      </div>
+      <div class="col-md-2">
+        <div class="mb-2">          
+          <div><strong>{{ nomeUsuario | uppercase }}</strong></div>
+          <div>{{ emailUsuario }}</div>
+        </div>
+        <div>
+          <button class="btn btn-sm btn-light" (click)="logout()">
+            Sair do Sistema
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 
+    exibir um componente de acordo com
+    a rota de navegação executada no projeto
+-->
+<router-outlet />

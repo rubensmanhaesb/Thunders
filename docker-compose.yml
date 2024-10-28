@@ -46,6 +46,16 @@ services:
     networks:
       - mynetwork
 
+  angularapp:
+    build:
+      context: .
+      dockerfile: ./tarefasweb/Dockerfile
+    ports:
+      - "4200:4200"
+    networks:
+      - mynetwork
+
+
 volumes:
   sqlserver_data:
   mongodb_data:

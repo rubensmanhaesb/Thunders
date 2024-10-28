@@ -1,0 +1,149 @@
+<div class="container mt-3">
+  <div class="card">
+    <div class="card-body">
+      <div class="row mb-2">
+        <div class="col-md-6">
+          <h4>Consulta de Tarefas da Agenda</h4>
+          <p>Listagem de tarefas cadastradas.</p>
+        </div>
+        <div class="col-md-6 text-end">
+          <button
+            class="btn btn-outline-success btn-sm"
+            data-bs-toggle="modal"
+            data-bs-target="#cadastrarTarefa"
+          >
+            Cadastrar tarefa
+          </button>        
+      </div>
+
+
+      <div class="mb-2">
+        <strong>{{mensagem}}</strong>
+      </div>
+
+      <div class="table-responsive" *ngIf="tarefas.length > 0">
+        <table class="table table-hover table-striped table-sm">
+          <thead>
+            <tr>
+              <th>Nome da tarefa</th>
+              <th>Descrição</th>
+              <th>Data e Hora</th>
+              <th>Prioridade</th>
+              <th>Operações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let t of tarefas">
+              <td>{{ t.nome }}</td>
+              <td>{{ t.descricao }}</td>
+              <td>{{ t.dataHora | date : "dd/MM/yyyy HH:mm" }}</td>
+              <td>{{ t.prioridadeTarefa?.nome }}</td>
+              <td>
+                <button class="btn btn-outline-primary btn-sm me-2"
+                  [routerLink]="['/pages/tarefa-edicao', t.id]">
+                  Editar
+                </button>
+                <button
+                  (click)="obterTarefa(t.id)" 
+                  data-bs-toggle="modal" data-bs-target="#modalExclusao"
+                  class="btn btn-sm btn-outline-danger">
+                  Excluir
+                </button>
+              </td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td colspan="5">Quantidade de tarefas: {{ tarefas.length }}</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+    <!-- Modal Cadastro -->
+    <div
+      class="modal fade"
+      id="cadastrarTarefa"
+      tabindex="-1"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">
+              Cadastro de Tarefa
+            </h1>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+              (click)="buscarTarefas()"
+            ></button>
+          </div>
+          <div class="modal-body">
+              <app-tarefas-cadastro/>
+          </div>
+        </div>
+      </div>
+    </div>    
+
+    <!-- Modal Exclusão -->
+    <div class="modal fade" id="modalExclusao" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Excluir tarefa</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+          
+              <table *ngIf="tarefa" class="table table-sm">
+                  <tbody>
+                      <tr>
+                          <td><strong>ID:</strong></td>
+                          <td>{{tarefa.id}}</td>
+                      </tr>
+                      <tr>
+                          <td><strong>Nome da tarefa:</strong></td>
+                          <td>{{tarefa.nome | uppercase}}</td>
+                      </tr>
+                      <tr>
+                          <td><strong>Data:</strong></td>
+                          <td>{{tarefa.data | date: 'dd/MM/yyyy'}}</td>
+                      </tr>
+                      <tr>
+                          <td><strong>Hora:</strong></td>
+                          <td>{{tarefa.data | date: 'HH:mm' }}</td>
+                      </tr>
+                      <tr>
+                        <td><strong>Descrição:</strong></td>
+                        <td>{{tarefa.descricao}}</td>
+                     </tr>
+                      <tr>
+                          <td><strong>Prioridade:</strong></td>
+                          <td>{{tarefa.prioridadeTarefa.nome}}</td>
+                      </tr>
+                  </tbody>
+              </table>
+  
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" 
+              data-bs-dismiss="modal">
+              Cancelar
+            </button>
+            <button type="button" class="btn btn-danger" 
+              (click)="excluirTarefa()"
+              data-bs-dismiss="modal">
+              Confirmar exclusão
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    
+  </div>
+</div>
