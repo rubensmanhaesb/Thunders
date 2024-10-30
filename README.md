@@ -1,6 +1,6 @@
 # TarefasApp
 
-Implementação dem CQRS utilizando Angular, .NET, SQL Server, MongoDB e RabbitMQ)
+Implementação do CQRS utilizando Angular, .NET, SQL Server, MongoDB, Docker, Azure e RabbitMQ)
 
 - NugetPackages.docx  - contém as extensões utilizadas nos projetos em Angular e em .NET (Nuget)
 - Configurações estão no appsettings.
