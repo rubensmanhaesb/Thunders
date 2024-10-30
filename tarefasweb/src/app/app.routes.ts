@@ -5,9 +5,8 @@ import { TarefasEdicaoComponent } from './pages/tarefas-edicao/tarefas-edicao.co
 
 export const routes: Routes = [
     {
-        path: '',
+        path: '', redirectTo: '/pages/tarefa-consulta',
         pathMatch: 'full',
-        redirectTo: '/pages/tarefa-consulta'
     },
     {
         path: 'pages/tarefa-cadastro',
