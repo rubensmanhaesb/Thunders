@@ -5,7 +5,7 @@ Implementação dem CQRS utilizando Angular, .NET, SQL Server, MongoDB e RabbitM
 - NugetPackages.docx  - contém as extensões utilizadas nos projetos em Angular e em .NET (Nuget)
 - Configurações estão no appsettings.
 - Banco de Dados - rodar a migration 
-
+- Utiliza os Patterns Mediator (Mediatr) e Command
 
 
 ## Requisitos

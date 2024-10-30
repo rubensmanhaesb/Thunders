@@ -16,7 +16,6 @@ COPY tarefasweb/ .
 # Constrói o projeto Angular para produção
 RUN npm run build -- --output-path=dist/tarefasweb && ls -la /app/dist/tarefasweb
 
-
 # Etapa 2: Servir o projeto Angular com Nginx
 FROM nginx:alpine
 
@@ -24,7 +23,7 @@ FROM nginx:alpine
 RUN mkdir -p /usr/share/nginx/html
 
 # Copia os arquivos construídos do Angular para o diretório do Nginx
-COPY --from=build /app/dist/tarefasweb /usr/share/nginx/html
+COPY --from=build /app/dist/tarefasweb/browser /usr/share/nginx/html
 
 # Copia o arquivo de configuração do Nginx
 COPY tarefasweb/nginx.conf /etc/nginx/nginx.conf
@@ -34,3 +33,5 @@ EXPOSE 4200
 
 # Inicia o Nginx
 CMD ["nginx", "-g", "daemon off;"]
+
+#CMD ["tail", "-f", "/dev/null"]
