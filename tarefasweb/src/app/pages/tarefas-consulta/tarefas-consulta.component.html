@@ -10,8 +10,7 @@
           <button
             class="btn btn-outline-success btn-sm"
             data-bs-toggle="modal"
-            data-bs-target="#cadastrarTarefa"
-          >
+            data-bs-target="#cadastrarTarefa">
             Cadastrar tarefa
           </button>        
       </div>
@@ -36,11 +35,12 @@
             <tr *ngFor="let t of tarefas">
               <td>{{ t.nome }}</td>
               <td>{{ t.descricao }}</td>
-              <td>{{ t.dataHora | date : "dd/MM/yyyy HH:mm" }}</td>
+              <td>{{ t.dataHora | date : "dd/MM/yyyy HH:mm" : 'UTC' }}</td>
               <td>{{ t.prioridadeTarefa?.nome }}</td>
               <td>
                 <button class="btn btn-outline-primary btn-sm me-2"
-                  [routerLink]="['/pages/tarefa-edicao', t.id]">
+                  (click)="alterarTarefa(t)"
+                  data-bs-toggle="modal" data-bs-target="#editarTarefa">
                   Editar
                 </button>
                 <button
@@ -88,6 +88,31 @@
         </div>
       </div>
     </div>    
+    <!-- Modal Edição -->
+    <div
+      class="modal fade"
+      id="editarTarefa"
+      tabindex="-1"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">
+              Alterar de Tarefa
+            </h1>
+            <button
+              type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+              (click)="buscarTarefas()"
+            ></button>
+          </div>
+          <div class="modal-body">
+              <app-tarefas-edicao [tarefa]="tarefaSelecionada"></app-tarefas-edicao>
+          </div>
+        </div>
+      </div>
+    </div>    
 
     <!-- Modal Exclusão -->
     <div class="modal fade" id="modalExclusao" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -111,11 +136,11 @@
                       </tr>
                       <tr>
                           <td><strong>Data:</strong></td>
-                          <td>{{tarefa.data | date: 'dd/MM/yyyy'}}</td>
+                          <td>{{ tarefa.dataHora | date: 'dd/MM/yyyy':'UTC' }}</td>
                       </tr>
                       <tr>
                           <td><strong>Hora:</strong></td>
-                          <td>{{tarefa.data | date: 'HH:mm' }}</td>
+                          <td>{{ tarefa.dataHora | date: 'HH:mm':'UTC' }}</td>
                       </tr>
                       <tr>
                         <td><strong>Descrição:</strong></td>

@@ -10,6 +10,8 @@ import {
   ReactiveFormsModule,
 } from '@angular/forms';
 import { RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
+import { TarefasEdicaoComponent } from "../tarefas-edicao/tarefas-edicao.component";
 
 
 @Component({
@@ -20,8 +22,9 @@ import { RouterLink } from '@angular/router';
     FormsModule,
     ReactiveFormsModule,
     TarefasCadastroComponent,
-    RouterLink
-  ],
+    RouterLink,
+    TarefasEdicaoComponent
+],
   templateUrl: './tarefas-consulta.component.html',
   styleUrl: './tarefas-consulta.component.css',
 })
@@ -29,6 +32,7 @@ export class TarefasConsultaComponent implements OnInit {
   //variáveis
   tarefa: any = null;
   tarefas: any[] = [];
+  tarefaSelecionada: any = null;
   mensagem: string = '';
 
   //método executado no momento em que
@@ -39,8 +43,8 @@ export class TarefasConsultaComponent implements OnInit {
 
 }
   //método construtor (injeção de dependência)
-  constructor(private httpClient: HttpClient, private utilService: UtilService) {}
-
+  constructor(private httpClient: HttpClient, private utilService: UtilService, private router: Router) {}
+   
   //criando o formulário de pesquisa
   form = new FormGroup({
     search: new FormControl('')  // Controle de pesquisa vazio apenas para identificar o formulário
@@ -69,7 +73,7 @@ export class TarefasConsultaComponent implements OnInit {
               return {
                 ...tarefa,
                 data: tarefa.dataHora ? new Date(tarefa.dataHora) : null,
-  
+             
                 prioridadeTarefa: this.getPrioridadeNome(tarefa.prioridade)
               };
             });
@@ -98,7 +102,7 @@ export class TarefasConsultaComponent implements OnInit {
   }
 
   // Função para consultar os dados da tarefa através do ID
-  obterTarefa(id: string): void {
+  obterTarefa(id: string) : void {
     // Exibindo o spinner
   
     // Fazendo uma consulta na API para obter 1 tarefa através do ID
@@ -121,6 +125,10 @@ export class TarefasConsultaComponent implements OnInit {
       });
   }
   
+  alterarTarefa(tarefa: any): void {
+    this.tarefaSelecionada = tarefa; // Define a tarefa para edição
+  }
+
   excluirTarefa() : void {
 
 
