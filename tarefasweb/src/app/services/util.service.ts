@@ -6,7 +6,7 @@ import { Injectable } from '@angular/core';
 })
 export class UtilService {
   // Defina a URL base da API e os endpoints específicos
-  readonly API_BASE_URL = 'http://localhost:8080/api';
+  readonly API_BASE_URL = 'http://localhost:5267/api';
   readonly TASKS_ENDPOINT = `${this.API_BASE_URL}/tarefas`;
 
   constructor() {}

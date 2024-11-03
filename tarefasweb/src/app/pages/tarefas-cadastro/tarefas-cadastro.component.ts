@@ -56,6 +56,7 @@ export class TarefasCadastroComponent implements OnInit {
           if (error.status === 400 && error.error?.errors) {
             // Se for um erro de validação (400), exiba as mensagens de erro
             this.mensagem = 'Erro ao cadastrar tarefa: ' + Object.values(error.error.errors).join(', ');
+            console.log('Erro ao cadastrar tarefa:', error.error.errors);
           } else {
             // Outros erros
             this.mensagem = 'Erro ao cadastrar tarefa. Por favor, tente novamente.';

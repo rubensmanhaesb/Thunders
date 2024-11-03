@@ -14,23 +14,23 @@ namespace TarefasApp.Application.Commands
         [Required(ErrorMessage = "Informe o id da tarefa.")]
         public Guid? Id { get; set; }
 
-        [MinLength(8, ErrorMessage = "Informe no mínimo {1} caracteres.")]
-        [MaxLength(100, ErrorMessage = "Informe no máximo {1} caracteres.")]
+        [MinLength(2, ErrorMessage = "Informe o nome com no mínimo {1} caracteres.")]
+        [MaxLength(100, ErrorMessage = "Informe o nome com no máximo {1} caracteres.")]
         [Required(ErrorMessage = "Informe o nome da tarefa.")]
         public string? Nome { get; set; }
 
         [RegularExpression(@"^\d{4}-\d{2}-\d{2}$",
-            ErrorMessage = "Data inválida, use o formato yyyy-MM-dd")]
+            ErrorMessage = "Data da tarefa inválida, use o formato yyyy-MM-dd")]
         [Required(ErrorMessage = "Informe a data da tarefa.")]
         public string? Data { get; set; }
 
         [RegularExpression(@"^\d{2}:\d{2}$",
-            ErrorMessage = "Hora inválida, use o formato HH:mm")]
+            ErrorMessage = "Hora da tarefa inválida, use o formato HH:mm")]
         [Required(ErrorMessage = "Informe a hora da tarefa.")]
         public string? Hora { get; set; }
 
-        [MinLength(8, ErrorMessage = "Informe no mínimo {1} caracteres.")]
-        [MaxLength(250, ErrorMessage = "Informe no máximo {1} caracteres.")]
+        [MinLength(2, ErrorMessage = "Informe a descrição com no mínimo {1} caracteres.")]
+        [MaxLength(250, ErrorMessage = "Informe a descrição com no máximo {1} caracteres.")]
         [Required(ErrorMessage = "Informe a descrição da tarefa.")]
         public string? Descricao { get; set; }
 

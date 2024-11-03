@@ -1,17 +1,3 @@
-/*
-import { Component } from '@angular/core';
-
-@Component({
-  selector: 'app-tarefas-edicao',
-  standalone: true,
-  imports: [],
-  templateUrl: './tarefas-edicao.component.html',
-  styleUrl: './tarefas-edicao.component.css'
-})
-export class TarefasEdicaoComponent {
-
-}
-*/
 
 
 import { CommonModule } from '@angular/common';
@@ -33,7 +19,7 @@ import { TarefaDataService } from '../../services/tarefa-data.service';
   templateUrl: './tarefas-edicao.component.html',
   styleUrl: './tarefas-edicao.component.html'
 })
-export class TarefasEdicaoComponent implements OnInit {
+export class TarefasEdicaoComponent implements OnInit, OnChanges {
   @Input() tarefa: any;
   mensagem: string = '';
   
@@ -109,8 +95,10 @@ export class TarefasEdicaoComponent implements OnInit {
           if (error.status === 400 && error.error?.errors) {
             // Se for um erro de validação (400), exiba as mensagens de erro
             this.mensagem = 'Erro ao alterar tarefa: ' + Object.values(error.error.errors).join(', ');
+            console.log('dentro do 400 Erro de validação:' + Object.values(error.error.errors).join(', '));
           } else {
             // Outros erros
+            console.log('fora do 400 Erro de validação:');
             this.mensagem = 'Erro ao alterar tarefa. Por favor, tente novamente.';
           }
   
