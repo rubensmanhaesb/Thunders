@@ -1,16 +1,17 @@
 ﻿using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Polly;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using TarefasApp.Infra.Messages.Middleware;
 using TarefasApp.Infra.Messages.Models;
 using TarefasApp.Infra.Messages.Services;
-using TarefasApp.Infra.Messages.Settings; 
+using TarefasApp.Infra.Messages.Settings;
 
 namespace TarefasApp.Infra.Messages.Consumers
 {
@@ -19,75 +20,83 @@ namespace TarefasApp.Infra.Messages.Consumers
         private readonly RabbitMQSettings _rabbitMQSettings;
         private readonly EmailService _emailService;
         private readonly ILogger<MessageConsumer> _logger;
+        private readonly IMessageMiddleware _middleware;
+        private IConnection _connection;
+        private IModel _channel;
 
-        public MessageConsumer(ILogger<MessageConsumer> logger, RabbitMQSettings rabbitMQSettings, EmailService emailService)
+        public MessageConsumer(ILogger<MessageConsumer> logger, RabbitMQSettings rabbitMQSettings, EmailService emailService, IMessageMiddleware middleware)
         {
             _rabbitMQSettings = rabbitMQSettings;
             _emailService = emailService;
             _logger = logger;
+            _middleware = middleware;
+        }
+
+        private void InitializeRabbitMQ()
+        {
+            _middleware.ExecuteAsync(async () =>
+            {
+                var factory = new ConnectionFactory
+                {
+                    HostName = _rabbitMQSettings.Host,
+                    Port = _rabbitMQSettings.Port,
+                    UserName = _rabbitMQSettings.Username,
+                    Password = _rabbitMQSettings.Password,
+                    VirtualHost = _rabbitMQSettings.VirtualHost
+                };
+
+                _connection = factory.CreateConnection();
+                _channel = _connection.CreateModel();
+
+                _channel.QueueDeclare(
+                    queue: _rabbitMQSettings.Queue,
+                    durable: true,
+                    autoDelete: false,
+                    exclusive: false,
+                    arguments: null
+                );
+
+                var consumer = new EventingBasicConsumer(_channel);
+                consumer.Received += async (sender, args) => await ProcessMessage(args);
+                _channel.BasicConsume(queue: _rabbitMQSettings.Queue, autoAck: false, consumer: consumer);
+
+                _logger.LogInformation("Conexão estabelecida com o RabbitMQ.");
+            }).Wait();
+        }
+
+        private async Task ProcessMessage(BasicDeliverEventArgs args)
+        {
+            await _middleware.ExecuteAsync(async () =>
+            {
+                var body = Encoding.UTF8.GetString(args.Body.ToArray());
+                var message = JsonConvert.DeserializeObject<EmailMessageModel>(body);
+
+                _emailService.SendMail(message);
+
+                _channel.BasicAck(args.DeliveryTag, multiple: false);
+            });
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             while (!stoppingToken.IsCancellationRequested)
             {
-                try
+                if (_connection == null || !_connection.IsOpen)
                 {
-                    var connectionFactory = new ConnectionFactory
-                    {
-                        //Uri = new Uri(_rabbitMQSettings.Url),
-                        HostName = _rabbitMQSettings.Host,
-                        Port = _rabbitMQSettings.Port,
-                        UserName = _rabbitMQSettings.Username,
-                        Password = _rabbitMQSettings.Password,
-                        VirtualHost = _rabbitMQSettings.VirtualHost
-                    };
-
-                    var connection = connectionFactory.CreateConnection();
-                    var model = connection.CreateModel();
-                    model.QueueDeclare(
-                        queue: _rabbitMQSettings.Queue,
-                        durable: true,
-                        autoDelete: false,
-                        exclusive: false,
-                        arguments: null
-                    );
-
-                    var consumer = new EventingBasicConsumer(model);
-                    consumer.Received += (sender, args) =>
-                    {
-                        try
-                        {
-                            //ler a mensagem contida na fila
-                            var body = Encoding.UTF8.GetString(args.Body.ToArray());
-
-                            //deserializando a mensagem (JSON)
-                            var message = JsonConvert.DeserializeObject<EmailMessageModel>(body);
-
-                            //disparando o email..
-                            _emailService.SendMail(message);
-
-                            //retirar a mensagem da fila
-                            model.BasicAck(args.DeliveryTag, false);
-                        }
-                        catch (Exception emailEx)
-                        {
-                            _logger.LogError($"MessageConsumer - Erro ao enviar email: {emailEx.Message}");
-                        }
-                    };
-
-                    //executando o consumer:
-                    model.BasicConsume(_rabbitMQSettings.Queue, false, consumer);
-                    _logger.LogInformation("MessageConsumer - Conexão estabelecida com o RabbitMQ.");
-                    break; // Sai do loop se a conexão for bem-sucedida
+                    _logger.LogWarning("Tentando conectar ou reconectar ao RabbitMQ...");
+                    InitializeRabbitMQ();
                 }
-                catch (Exception ex)
-                {
-                    _logger.LogInformation($"MessageConsumer - Error connecting to RabbitMQ: {ex.Message}");
-                    _logger.LogError("MessageConsumer - Erro ao conectar ao RabbitMQ. Tentando novamente em 5 segundos...");
-                    await Task.Delay(5000, stoppingToken);
-                }
+
+                await Task.Delay(5000, stoppingToken);
             }
         }
+
+        public override void Dispose()
+        {
+            _channel?.Close();
+            _connection?.Close();
+            base.Dispose();
+        }
     }
+
 }

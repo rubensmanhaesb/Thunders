@@ -1,12 +1,12 @@
 ﻿using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Polly;
 using RabbitMQ.Client;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
-using TarefasApp.Infra.Messages.Consumers;
+using TarefasApp.Infra.Messages.Middleware;
 using TarefasApp.Infra.Messages.Models;
 using TarefasApp.Infra.Messages.Settings;
 
@@ -16,79 +16,66 @@ namespace TarefasApp.Infra.Messages.Producers
     {
         private readonly RabbitMQSettings _rabbitMQSettings;
         private readonly ILogger<MessageProducer> _logger;
+        private readonly IMessageMiddleware _middleware;
 
-        public MessageProducer(ILogger<MessageProducer> logger, RabbitMQSettings rabbitMQSettings)
+        public MessageProducer(ILogger<MessageProducer> logger, RabbitMQSettings rabbitMQSettings, IMessageMiddleware middleware)
         {
             _rabbitMQSettings = rabbitMQSettings;
             _logger = logger;
+            _middleware = middleware;
         }
 
-        public void SendMessage(EmailMessageModel emailMessageModel)
+        public async Task SendMessageAsync(EmailMessageModel emailMessageModel, CancellationToken cancellationToken = default)
         {
-            int retryCount = 5; // Número máximo de tentativas
-            int delayBetweenRetries = 5000; // Tempo em milissegundos entre as tentativas (5 segundos)
-
-            for (int attempt = 1; attempt <= retryCount; attempt++)
+            await _middleware.ExecuteAsync(async () =>
             {
-                try
-                {
-                    var connectionFactory = new ConnectionFactory
-                    {
-                        //Uri = new Uri(_rabbitMQSettings.Url),
-                        HostName = _rabbitMQSettings.Host,
-                        Port = _rabbitMQSettings.Port,
-                        UserName = _rabbitMQSettings.Username,
-                        Password = _rabbitMQSettings.Password,
-                        VirtualHost = _rabbitMQSettings.VirtualHost
-                    };
+                using var connection = CreateConnection();
+                using var channel = connection.CreateModel();
 
-                    using (var connection = connectionFactory.CreateConnection())
-                    {
+                DeclareQueue(channel);
+                PublishMessage(channel, emailMessageModel);
 
-                        using (var model = connection.CreateModel())
-                        {
+                _logger.LogInformation("Mensagem enviada com sucesso para o RabbitMQ.");
+            }, cancellationToken: cancellationToken);
+        }
 
-                            model.QueueDeclare(
-                                queue: _rabbitMQSettings.Queue,
-                                durable: true,
-                                autoDelete: false,
-                                exclusive: false,
-                                arguments: null
-                            );
+        private IConnection CreateConnection()
+        {
+            var factory = new ConnectionFactory
+            {
+                HostName = _rabbitMQSettings.Host,
+                Port = _rabbitMQSettings.Port,
+                UserName = _rabbitMQSettings.Username,
+                Password = _rabbitMQSettings.Password,
+                VirtualHost = _rabbitMQSettings.VirtualHost
+            };
 
-                            var json = JsonConvert.SerializeObject(emailMessageModel);
-                            var body = Encoding.UTF8.GetBytes(json);
+            return factory.CreateConnection();
+        }
 
-                            //escrever a mensagem na fila
-                            model.BasicPublish(
-                                exchange: string.Empty,
-                                routingKey: _rabbitMQSettings.Queue,
-                                basicProperties: null,
-                                body: body // Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(emailMessageModel))
-                                );
+        private void DeclareQueue(IModel channel)
+        {
+            channel.QueueDeclare(
+                queue: _rabbitMQSettings.Queue,
+                durable: true,
+                autoDelete: false,
+                exclusive: false,
+                arguments: null
+            );
+        }
 
-                            _logger.LogInformation($"MessageProducer - Conexão realizada com sucesso RabbitMQ: ");
-                            return;
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogInformation($"MessageProducer - Error connecting to RabbitMQ: {ex.Message}");
-                    _logger.LogError($"MessageProducer - Erro ao conectar ao RabbitMQ. Tentando novamente em {delayBetweenRetries} milissegundos...");
+        private void PublishMessage(IModel channel, EmailMessageModel emailMessageModel)
+        {
+            var messageJson = JsonConvert.SerializeObject(emailMessageModel);
+            var messageBody = Encoding.UTF8.GetBytes(messageJson);
 
-                    if (attempt == retryCount)
-                    {
-                        _logger.LogError("MessageProducer - Máximo de tentativas atingido. Não foi possível conectar ao RabbitMQ.");
-                    }
-                    else
-                    {
-                        _logger.LogInformation("MessageProducer - Aguradando o próximo send para tentarnovamente...");
-                        // Aguardar antes de tentar novamente
-                        Thread.Sleep(delayBetweenRetries);
-                    }
-                }
-            }
+            channel.BasicPublish(
+                exchange: string.Empty,
+                routingKey: _rabbitMQSettings.Queue,
+                basicProperties: null,
+                body: messageBody
+            );
         }
     }
+
 }

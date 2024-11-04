@@ -39,7 +39,7 @@ namespace TarefasApp.Application.Handlers.Requests
         }
         private void SendMessage(TarefaDto tarefaDto, string subject)
         {
-            _messageProducer.SendMessage(new EmailMessageModel
+            _messageProducer.SendMessageAsync(new EmailMessageModel
             {
                 Subject = subject,
                 Body = Newtonsoft.Json.JsonConvert.SerializeObject(tarefaDto, Formatting.Indented)
