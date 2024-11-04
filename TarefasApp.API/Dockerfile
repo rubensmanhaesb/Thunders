@@ -57,6 +57,13 @@ WORKDIR /app
 # Copia os arquivos publicados da fase anterior para o diretório de trabalho.
 COPY --from=publish /app/publish .
 
+# Eleva os privilégios para root para permitir a instalação de pacotes
+USER root
+
+# Instala os certificados SSL raiz
+RUN apt-get update && apt-get install -y ca-certificates && update-ca-certificates
+
+
 # Define o comando de entrada (ENTRYPOINT) que executa a aplicação. Aqui o comando executa a API com o argumento '--environment' configurado para 'Development'.
 ENTRYPOINT ["dotnet", "TarefasApp.API.dll", "--environment", "Production"]
 

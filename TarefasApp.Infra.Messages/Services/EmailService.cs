@@ -10,7 +10,7 @@ using TarefasApp.Infra.Messages.Settings;
 
 namespace TarefasApp.Infra.Messages.Services
 {
-    public class EmailService
+    public class EmailService 
     {
         private readonly EmailSettings _emailSettings;
 
@@ -21,6 +21,10 @@ namespace TarefasApp.Infra.Messages.Services
 
         public void SendMail(EmailMessageModel model) 
         {
+
+            System.Net.ServicePointManager.ServerCertificateValidationCallback +=
+                (sender, certificate, chain, sslPolicyErrors) => true;  // This line is necessary to avoid SSL/TLS certificate validation
+
             var mailMessage = new MailMessage(_emailSettings.Email, _emailSettings.To);
             mailMessage.Subject = model.Subject;
             mailMessage.Body = model.Body;

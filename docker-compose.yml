@@ -3,6 +3,7 @@ version: '3.8'
 services:
   sqlserver:
     image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sqlserver
     environment:
       - ACCEPT_EULA=Y
       - SA_PASSWORD=Rubens2024!
@@ -15,6 +16,7 @@ services:
 
   mongodb:
     image: mongo:latest
+    container_name: mongodb
     ports:
       - "27017:27017"
     networks:
@@ -24,6 +26,7 @@ services:
 
   rabbitmq:
     image: rabbitmq:management
+    container_name: rabbitmq
     ports:
       - "5672:5672"   
       - "15672:15672" 
@@ -34,6 +37,7 @@ services:
       - mynetwork
 
   tarefasapp:
+    container_name: tarefasapp
     build:
       context: .
       dockerfile: ./TarefasApp.API/Dockerfile
@@ -47,6 +51,7 @@ services:
       - mynetwork
 
   angularapp:
+    container_name: angularapp
     build:
       context: .
       dockerfile: ./tarefasweb/Dockerfile

@@ -37,7 +37,14 @@ namespace TarefasApp.Application.Handlers.Requests
             _tarefaDomainService = tarefaDomainService;
             _messageProducer = messageProducer;
         }
-
+        private void SendMessage(TarefaDto tarefaDto, string subject)
+        {
+            _messageProducer.SendMessage(new EmailMessageModel
+            {
+                Subject = subject,
+                Body = Newtonsoft.Json.JsonConvert.SerializeObject(tarefaDto, Formatting.Indented)
+            });
+        }
         public async Task<TarefaDto> Handle(TarefaCreateCommand request, CancellationToken cancellationToken)
         {
 
@@ -54,12 +61,8 @@ namespace TarefasApp.Application.Handlers.Requests
 
             await _mediator.Publish(tarefaNotification);
 
+            SendMessage(tarefaDto, $"Nova tarefa criada com sucesso em {DateTime.Now.ToString("dd/MM/yyyy HH:mm")}");
 
-            _messageProducer.SendMessage(new EmailMessageModel
-            {
-                Subject = $"Nova tarefa criada com sucesso em {DateTime.Now.ToString("dd/MM/yyyy HH:mm")}",
-                Body = Newtonsoft.Json.JsonConvert.SerializeObject(tarefaDto, Formatting.Indented)
-            }); ;
 
             return tarefaDto;
         }
@@ -79,6 +82,9 @@ namespace TarefasApp.Application.Handlers.Requests
             };
 
             await _mediator.Publish(tarefaNotification);
+          
+            SendMessage(tarefaDto, $"Tarefa alterada com sucesso em {DateTime.Now.ToString("dd/MM/yyyy HH:mm")}");
+
             return tarefaDto;
         }
 
@@ -97,6 +103,9 @@ namespace TarefasApp.Application.Handlers.Requests
             };
 
             await _mediator.Publish(tarefaNotification);
+
+            SendMessage(tarefaDto, $"Tarefa excluída com sucesso em {DateTime.Now.ToString("dd/MM/yyyy HH:mm")}");
+
             return tarefaDto;
         }
     }
