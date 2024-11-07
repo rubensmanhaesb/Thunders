@@ -6,6 +6,7 @@ Implementação do CQRS utilizando Angular, .NET, SQL Server, MongoDB, Docker, A
 - NugetPackages.docx  - contém as extensões utilizadas nos projetos em Angular e em .NET (Nuget) 
 - Configurações estão no appsettings.
 - Banco de Dados - rodar a migration ou executar o arquivo Script.Sql (localizado na pasta rais do projeto)
+- O projeto roda no docker (Back/Frontend), basta rodar o docker-compose up -d no raiz do projeto. 
 - Utiliza os Patterns Mediator (Mediatr) e Command
 
 
