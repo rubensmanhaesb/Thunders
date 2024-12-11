@@ -94,15 +94,15 @@ jobs:
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_FFD21D43653D48EA9364A796F5638DB2 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_9A6542896475493BBFC1EA8E2CCEA894 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_05EB4318D97140A180E6A65C999A4F2E }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_DD3FA518FCFC4E4595AE769B61B1EA8F }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_8ECFADB304404F7FBF90BB1458184C87 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_48CE7C4D007E4D51A9F2B63A5067CA06 }}
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
-          app-name: 'CQRS'
+          app-name: 'cqrs'
           slot-name: 'production'
           package: './myapp.zip'  # Usar o arquivo ZIP gerado
           
