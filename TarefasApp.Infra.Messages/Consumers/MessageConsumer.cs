@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using Polly;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System;

@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using Polly;
 using RabbitMQ.Client;
 using System;
 using System.Text;
